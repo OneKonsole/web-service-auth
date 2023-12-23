@@ -9,7 +9,6 @@ export const DB_HOST = process.env.DB_HOST || 'cluster71885.1ol99nm.mongodb.net'
 
 export const DB_NAME = process.env.DB_NAME || 'user_management_service';
 
-// mongodb+srv://Cluster71885:QklKdl9fcGxu@cluster71885.1ol99nm.mongodb.net/user_management_service?appName=mongosh+1.9.1
 export const DB_URL = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}?appName=mongosh+1.9.1&retryWrites=true&w=majority`;
 
 // You should ideally store the JWT secret in an environment variable for security purposes
