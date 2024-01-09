@@ -23,4 +23,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: $/authentification-service:latest
+          tags: onekonsole/authentification-service:latest
