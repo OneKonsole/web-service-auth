@@ -71,6 +71,21 @@ ingress:
 
 resources: {}
 
+env:
+  - port: ""
+  - db_username: ""
+  - db_password: ""
+  - db_host: ""
+  - db_name: ""
+  - jwt_secret: ""
+  - jwt_expiration: "1h"
+  - keycloak_realm: ""
+  - keycloak_server_url: ""
+  - keycloak_client_id: ""
+  - keycloak_client_secret: ""
+  - keycloak_admin_username: ""
+  - keycloak_admin_password: ""
+
 autoscaling:
   enabled: true
   minReplicas: 1

@@ -19,7 +19,7 @@ spec:
       {{- end }}
       labels:
         {{- include "authentification-service.labels" . | nindent 8 }}
-	{{- with .Values.podLabels }}
+ {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
@@ -36,6 +36,33 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: PORT
+              value: "{{ .Values.env.port }}"
+            - name: DB_USERNAME
+              value: "{{ .Values.env.db_username }}"
+            - name: DB_PASSWORD
+              value: "{{ .Values.env.db_password }}"
+            - name: DB_HOST
+              value: "{{ .Values.env.db_host }}"
+            - name: DB_NAME
+              value: "{{ .Values.env.db_name }}"
+            - name: JWT_SECRET
+              value: "{{ .Values.env.jwt_secret }}"
+            - name: JWT_EXPIRATION
+              value: "{{ .Values.env.jwt_expiration }}"
+            - name: KEYCLOAK_REALM
+              value: "{{ .Values.env.keycloak_realm }}"
+            - name: KEYCLOAK_SERVER_URL
+              value: "{{ .Values.env.keycloak_server_url }}"
+            - name: KEYCLOAK_CLIENT_ID
+              value: "{{ .Values.env.keycloak_client_id }}"
+            - name: KEYCLOAK_CLIENT_SECRET
+              value: "{{ .Values.env.keycloak_client_secret }}"
+            - name: KEYCLOAK_ADMIN_USERNAME
+              value: "{{ .Values.env.keycloak_admin_username }}"
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: "{{ .Values.env.keycloak_admin_password }}"
           ports:
             - name: http
               containerPort: {{ .Values.service.ports.http }}
