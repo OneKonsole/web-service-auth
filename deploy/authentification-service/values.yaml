@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: onekonsole/authentification-service
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   tag: "latest"
 
 serviceAccount:
