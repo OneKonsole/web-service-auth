@@ -57,5 +57,3 @@ jobs:
             --set keycloak_admin_password=${{ secrets.KEYCLOAK_ADMIN_PASSWORD }}
         env:
           KUBECONFIG: ${{ secrets.KUBE_CONFIG }}
-        env-secrets: |
-          KUBE_CONFIG=$KUBECONFIG_CONTENT
