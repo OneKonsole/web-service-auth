@@ -33,14 +33,12 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Helm
-        uses: helm/kubectl-action@v1
+        uses: vimeda/helm@v1.7.0
         with:
-          kubectl-version: latest
-          helm-version: latest
+          namespace: ${{ secrets.KUBE_CONTEXT }}
 
       - name: Helm Upgrade
         run: |
-          kubectl config use-context ${{ secrets.KUBE_CONTEXT }}
           helm upgrade --install authentification-service ./deploy/authentification-service -n auth --create-namespace \
             --set port=${{ secrets.AUTH_SERVICE_PORT }} \
             --set db_username=${{ secrets.AUTH_SERVICE_DB_USERNAME }} \
@@ -56,4 +54,4 @@ jobs:
             --set keycloak_admin_username=${{ secrets.KEYCLOAK_ADMIN_USERNAME }} \
             --set keycloak_admin_password=${{ secrets.KEYCLOAK_ADMIN_PASSWORD }}
         env:
-          KUBECONFIG: ${{ secrets.KUBE_CONFIG }}
+          KUBECONFIG_FILE : ${{ secrets.KUBE_CONFIG }}
