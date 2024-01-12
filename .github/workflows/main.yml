@@ -60,3 +60,20 @@ jobs:
             --set keycloak_admin_password=${{ secrets.KEYCLOAK_ADMIN_PASSWORD }}
         env:
           KUBECONFIG_FILE : ${{ secrets.KUBE_CONFIG }}
+
+
+
+  helm upgrade --install authentification-service ./deploy/authentification-service -n auth --create-namespace \
+    --set env.port=80 \
+    --set env.db_username="" \
+    --set env.db_password="" \
+    --set env.db_host="" \
+    --set env.db_name="" \
+    --set env.jwt_secret="JWT_SECRET" \
+    --set env.jwt_expiration="1h" \
+    --set env.keycloak_realm="onekonsole-sso" \
+    --set env.keycloak_server_url="http://kc.onekonsole.emetral.fr" \
+    --set env.keycloak_client_id="onekonsole-client" \
+    --set env.keycloak_client_secret="WfG46f8VtUGQLxPWui4rdfAeygqeyqLQ" \
+    --set env.keycloak_admin_username="admin" \
+    --set env.keycloak_admin_password="admin"

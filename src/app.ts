@@ -13,14 +13,7 @@ import {
     UserAlreadyExistsError
 } from "./error/errors";
 import http from 'http';
-
-console.log = function () {
-    // Add prefix to log messages
-    const args = Array.from(arguments);
-    args.unshift("[LOG][" + new Date().toUTCString() + "]");
-    // @ts-ignore
-    return console.log.apply(console, args);
-}
+import {LOG_TYPE, logger} from './utils/logger';
 
 const app = express();
 
@@ -37,13 +30,13 @@ app.use((req, res, next) => {
 
 // use middlewares for logging
 app.use((req, res, next) => {
-    console.log(`Request received: ${req.method} ${req.url}`);
+    logger(`Request received: ${req.method} ${req.url}`, LOG_TYPE.INFO);
     next();
 });
 
 // use middleware to handle errors
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-    console.error("[ERROR][", new Date().toUTCString(), "]", err);
+    logger(err.message, LOG_TYPE.ERROR);
     // Handle different types of errors thrown by the application (errors.ts)
     if (
         err instanceof NotFoundError ||
@@ -69,7 +62,7 @@ const server = http.createServer(app);
 
 // Start the server
 server.listen(PORT, () => {
-    console.info(`[INFO][${new Date().toUTCString()}] Server running on port ${PORT}`);
+    logger(`Server running on port ${PORT}`, LOG_TYPE.INFO);
 });
 
 export {app, server};
