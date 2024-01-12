@@ -24,3 +24,38 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: onekonsole/authentification-service:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Helm
+        uses: helm/kubectl-action@v1
+        with:
+          kubectl-version: latest
+          helm-version: latest
+
+      - name: Helm Upgrade
+        run: |
+          kubectl config use-context ${{ secrets.KUBE_CONTEXT }}
+          helm upgrade --install authentification-service ./deploy/authentification-service -n auth --create-namespace \
+            --set port=${{ secrets.AUTH_SERVICE_PORT }} \
+            --set db_username=${{ secrets.AUTH_SERVICE_DB_USERNAME }} \
+            --set db_password=${{ secrets.AUTH_SERVICE_DB_PASSWORD }} \
+            --set db_host=${{ secrets.AUTH_SERVICE_DB_HOST }} \
+            --set db_name=${{ secrets.AUTH_SERVICE_DB_NAME }} \
+            --set jwt_secret=${{ secrets.AUTH_SERVICE_JWT_SECRET }} \
+            --set jwt_expiration=${{ secrets.AUTH_SERVICE_JWT_EXPIRATION }} \
+            --set keycloak_realm=${{ secrets.KEYCLOAK_REALM }} \
+            --set keycloak_server_url=${{ secrets.KEYCLOAK_SERVER_URL }} \
+            --set keycloak_client_id=${{ secrets.KEYCLOAK_CLIENT_ID }} \
+            --set keycloak_client_secret=${{ secrets.KEYCLOAK_CLIENT_SECRET }} \
+            --set keycloak_admin_username=${{ secrets.KEYCLOAK_ADMIN_USERNAME }} \
+            --set keycloak_admin_password=${{ secrets.KEYCLOAK_ADMIN_PASSWORD }}
+        env:
+          KUBECONFIG: ${{ secrets.KUBE_CONFIG }}
+        env-secrets: |
+          KUBE_CONFIG=$KUBECONFIG_CONTENT
