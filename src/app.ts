@@ -14,6 +14,14 @@ import {
 } from "./error/errors";
 import http from 'http';
 
+console.log = function () {
+    // Add prefix to log messages
+    const args = Array.from(arguments);
+    args.unshift("[LOG][" + new Date().toUTCString() + "]");
+    // @ts-ignore
+    return console.log.apply(console, args);
+}
+
 const app = express();
 
 // Middleware

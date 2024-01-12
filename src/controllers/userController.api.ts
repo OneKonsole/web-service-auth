@@ -13,6 +13,22 @@ import {
 } from "../config/env";
 import {UserProperties} from "../../types";
 
+console.log = function () {
+    // Add prefix to log messages
+    const args = Array.from(arguments);
+    args.unshift("[LOG][" + new Date().toUTCString() + "]");
+    // @ts-ignore
+    return console.log.apply(console, args);
+}
+
+console.error = function () {
+    // Add prefix to log messages
+    const args = Array.from(arguments);
+    args.unshift("[ERROR][" + new Date().toUTCString() + "]");
+    // @ts-ignore
+    return console.error.apply(console, args);
+}
+
 export default class APIUserController implements IUserController {
     private async loginUser(username: string, password: string): Promise<{
         token: any;
@@ -37,6 +53,7 @@ export default class APIUserController implements IUserController {
         };
 
         try {
+            console.log(`Trying to log user ${username}`)
             const response = await axios.request(config);
             return {
                 token: response.data.access_token,
@@ -105,6 +122,7 @@ export default class APIUserController implements IUserController {
 
         // use axios to create user
         try {
+            console.log(`Trying to create user ${username}`)
             await axios.request(config);
             res.status(201).send({
                 message: 'User created successfully',
@@ -136,6 +154,7 @@ export default class APIUserController implements IUserController {
         }
 
         try {
+            console.log(`Trying to get user info`)
             const response = await axios.request(config);
             return {
                 ...response.data,
@@ -143,6 +162,7 @@ export default class APIUserController implements IUserController {
                 code: 200
             }
         } catch (e: any) {
+            console.error(e.message);
             return {
                 message: 'Failed to get user details',
                 code: 500
@@ -159,7 +179,6 @@ export default class APIUserController implements IUserController {
                 code: 500
             });
         }
-
         const result = await this.getUserInfo(bearerToken as string);
         res.status(result.code).send(result);
     }
@@ -170,6 +189,7 @@ export default class APIUserController implements IUserController {
 
         // login user
         try {
+            console.log(`Trying to login user ${username}`)
             const {token, refreshToken} = await this.loginUser(username, password);
 
             if (!token || !refreshToken) {
@@ -287,6 +307,7 @@ export default class APIUserController implements IUserController {
         };
 
         try {
+            console.log(`Trying to update user ${username}`)
             await axios.request(config);
             res.status(201).send({
                 message: 'User updated successfully',
@@ -322,6 +343,7 @@ export default class APIUserController implements IUserController {
         };
 
         try {
+            console.log(`Trying to logout user`)
             await axios.request(config);
             res.status(201).send({
                 message: 'User logout successfully',
