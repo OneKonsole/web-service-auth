@@ -48,20 +48,20 @@ service:
     extraPorts: []
 
 ingress:
-  enabled: false
+  enabled: true
   ingressClassName: "nginx"
   pathType: ImplementationSpecific
   apiVersion: ""
   hostname: auth.onekonsole.emetral.fr
   path: "{{ .Values.httpRelativePath }}"
-  servicePort: https
+  servicePort: http
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    kubernetes.io/tls-acme: "true"
+    #cert-manager.io/cluster-issuer: letsencrypt-prod
+    #kubernetes.io/tls-acme: "true"
     external-dns.alpha.kubernetes.io/target: 127.O.O.1
   labels:
     ingress-target-updater: "true"
-  tls: true
+  tls: false
   selfSigned: false
   extraHosts: []
   extraPaths: []

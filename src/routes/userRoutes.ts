@@ -51,6 +51,10 @@ router.get('/users/:userUuid', authenticate, (req, res) => {
         logger(e.message, LOG_TYPE.ERROR);
     }
 });
+router.get('/verify', authenticate, (req, res) => {
+    res.status(200).json({message: 'OK'});
+})
+
 router.put('/users/:userUuid', authenticate, (req, res) => {
     try {
         return userController.updateUser(req, res)
