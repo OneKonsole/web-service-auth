@@ -40,6 +40,8 @@ jobs:
 
       - name: Helm Upgrade
         run: |
+          # Move to context
+          kubectl config use-context ${{ secrets.KUBE_CONTEXT }}
           helm upgrade --install authentification-service ./deploy/authentification-service -n auth --create-namespace \
             --set env.port=${{ secrets.AUTH_SERVICE_PORT }} \
             --set env.db_username=${{ secrets.AUTH_SERVICE_DB_USERNAME }} \
