@@ -39,13 +39,17 @@ export default class APIUserController implements IUserController {
 
         try {
             logger(`Trying to login user ${username}`, LOG_TYPE.INFO);
+            logger(JSON.stringify(config), LOG_TYPE.WARNING);
             const response = await axios.request(config);
+
             return {
                 token: response.data.access_token,
                 refreshToken: response.data.refresh_token
             }
         } catch (e: any) {
             logger(e.message, LOG_TYPE.ERROR);
+            logger(JSON.stringify(config), LOG_TYPE.WARNING);
+
             throw new Error('Failed to login');
         }
     }

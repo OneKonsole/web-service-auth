@@ -11,6 +11,11 @@ const router = express.Router();
 
 const userController: IUserController = new APIUserController();
 
+router.get('/', (req, res) => {
+    // liveness probe
+    res.status(200).json({message: 'OK'});
+});
+
 router.post('/users/register', (req, res) => {
     try {
         return userController.createUser(req, res)
