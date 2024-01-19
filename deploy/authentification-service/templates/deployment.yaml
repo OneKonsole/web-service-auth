@@ -38,37 +38,73 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: PORT
-              value: "{{ .Values.env.port }}"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.secretName }}
+                  key: {{ .Values.env.port_key }}
             - name: DB_USERNAME
-              value: "{{ .Values.env.db_username }}"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.secretName }}
+                  key: {{ .Values.env.db_username_key }}
             - name: DB_PASSWORD
-              value: "{{ .Values.env.db_password }}"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.secretName }}
+                  key: {{ .Values.env.db_password_key }}
             - name: DB_HOST
-              value: "{{ .Values.env.db_host }}"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.secretName }}
+                  key: {{ .Values.env.db_host_key }}
             - name: DB_NAME
-              value: "{{ .Values.env.db_name }}"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.secretName }}
+                  key: {{ .Values.env.db_name_key }}
             - name: JWT_SECRET
-              value: "{{ .Values.env.jwt_secret }}"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.secretName }}
+                  key: {{ .Values.env.jwt_secret_key }}
             - name: JWT_EXPIRATION
-              value: "{{ .Values.env.jwt_expiration }}"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.secretName }}
+                  key: {{ .Values.env.jwt_expiration_key }}
             - name: KEYCLOAK_REALM
-              value: "{{ .Values.env.keycloak_realm }}"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.secretName }}
+                  key: {{ .Values.env.keycloak_realm_key }}
             - name: KEYCLOAK_SERVER_URL
-              value: "{{ .Values.env.keycloak_server_url }}"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.secretName }}
+                  key: {{ .Values.env.keycloak_server_url_key }}
             - name: KEYCLOAK_CLIENT_ID
-              value: "{{ .Values.env.keycloak_client_id }}"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.secretName }}
+                  key: {{ .Values.env.keycloak_client_id_key }}
             - name: KEYCLOAK_CLIENT_SECRET
-              value: "{{ .Values.env.keycloak_client_secret }}"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.secretName }}
+                  key: {{ .Values.env.keycloak_client_secret_key }}
             - name: KEYCLOAK_ADMIN_USERNAME
-              value: "{{ .Values.env.keycloak_admin_username }}"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.secretName }}
+                  key: {{ .Values.env.keycloak_admin_username_key }}
             - name: KEYCLOAK_ADMIN_PASSWORD
-              value: "{{ .Values.env.keycloak_admin_password }}"
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.env.secretName }}
+                  key: {{ .Values.env.keycloak_admin_password_key }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.ports.http }}
-              protocol: TCP
-            - name: https
-              containerPort: {{ .Values.service.ports.https }}
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
