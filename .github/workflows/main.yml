@@ -6,6 +6,7 @@ on:
       - "main"
       - "feature/deploy"
 
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,3 +25,39 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: onekonsole/authentification-service:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Write out the kubeconfig info
+        run: |
+          echo ${{ secrets.DEPLOY_ACCOUNT }} | base64 -d > /tmp/config
+
+      - name: Helm Upgrade
+        run: |
+          # Move to context
+          kubectl config use-context ${{ secrets.KUBE_CONTEXT }}
+          helm upgrade --install authentification-service ./deploy/authentification-service -n auth --create-namespace \
+            --set env.port=${{ secrets.AUTH_SERVICE_PORT }} \
+            --set env.db_username=${{ secrets.AUTH_SERVICE_DB_USERNAME }} \
+            --set env.db_password=${{ secrets.AUTH_SERVICE_DB_PASSWORD }} \
+            --set env.db_host=${{ secrets.AUTH_SERVICE_DB_HOST }} \
+            --set env.db_name=${{ secrets.AUTH_SERVICE_DB_NAME }} \
+            --set env.jwt_secret=${{ secrets.AUTH_SERVICE_JWT_SECRET }} \
+            --set env.jwt_expiration=${{ secrets.AUTH_SERVICE_JWT_EXPIRATION }} \
+            --set env.keycloak_realm=${{ secrets.KEYCLOAK_REALM }} \
+            --set env.keycloak_server_url=${{ secrets.KEYCLOAK_SERVER_URL }} \
+            --set env.keycloak_client_id=${{ secrets.KEYCLOAK_CLIENT_ID }} \
+            --set env.keycloak_client_secret=${{ secrets.KEYCLOAK_CLIENT_SECRET }} \
+            --set env.keycloak_admin_username=${{ secrets.KEYCLOAK_ADMIN_USERNAME }} \
+            --set env.keycloak_admin_password=${{ secrets.KEYCLOAK_ADMIN_PASSWORD }}
+        env:
+          KUBECONFIG : ${{ secrets.KUBE_CONFIG }}
+
+      - name: Remove kubeconfig info
+        run: rm -f /tmp/config
